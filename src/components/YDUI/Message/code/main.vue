@@ -10,7 +10,7 @@
           :class="{'center': center}">
         <img v-if="['info', 'success', 'error', 'warning'].includes(type)"
              :src="icons[type + 'Icon']" class="yd-message__icon" />
-        <p class="yd-message__text" :class="{'yd-flex-1': !center}" v-text="message" />
+        <p class="yd-message__text" v-text="message" />
       </div>
       <img v-if="showClose" @click="close" :src="icons[type + 'CloseIcon']" class="yd-message__close-btn"/>
     </div>
