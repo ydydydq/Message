@@ -3,11 +3,11 @@
     <div v-if="visible"
          :class="[type]"
          :style="positionStyle"
-         class="yd-message yd-flex-h-hL-vC"
+         class="yd-message"
          @mouseenter="clearTimer"
          @mouseleave="startTimer">
-      <div class="yd-message__content yd-flex-h-hL-vC yd-flex-1"
-          :class="{'yd-flex-h-hC-vC': center}">
+      <div class="yd-message__content"
+          :class="{'center': center}">
         <img v-if="['info', 'success', 'error', 'warning'].includes(type)"
              :src="icons[type + 'Icon']" class="yd-message__icon" />
         <p class="yd-message__text" :class="{'yd-flex-1': !center}" v-text="message" />
@@ -31,7 +31,8 @@
     data() {
       return {
         icons:{
-          infoIcon, infoCloseIcon, successIcon, successCloseIcon, errorIcon, errorCloseIcon, warningIcon, warningCloseIcon
+          infoIcon, infoCloseIcon, successIcon, successCloseIcon,
+          errorIcon, errorCloseIcon, warningIcon, warningCloseIcon
         },
         closed: false,
         timer: null,
@@ -40,7 +41,7 @@
         showClose: false,
         message: '',
         duration: 3000,
-        verticalOffset: 20, // 顶部偏移量
+        offset: 20, // 顶部偏移量
         onClose: null,
         center: false
       }
@@ -48,7 +49,7 @@
     computed: {
       positionStyle() {
         return {
-          'top': `${ this.verticalOffset }px`
+          'top': `${ this.offset }px`
         };
       }
     },
@@ -101,16 +102,21 @@
     border-radius: 5px;
     overflow: hidden;
     transition: opacity .3s, transform .4s, top .4s;
+    display: flex;
+    align-items: center;
   }
   .yd-message__content{
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    flex: 1;
   }
-  .yd-message__content .yd-message__icon{
+  .yd-message__icon{
     min-width: 32px;
     width: 32px;
     height: 32px;
   }
-  .yd-message__content .yd-message__text{
+  .yd-message__text{
     color: #fff;
     font-size: 14px;
   }
@@ -120,30 +126,23 @@
     height: 32px;
     cursor: pointer;
   }
-  /*成功*/
   .yd-message.success{
     background: rgba(13,206,127,0.72);
     border: 1px solid rgba(13,206,127,1);
   }
-  /*失败*/
   .yd-message.error{
     background: rgba(255,68,68,0.72);
     border: 1px solid rgba(255,68,68,1);
   }
-  /*警告*/
   .yd-message.warning{
     background: rgba(254,132,86,0.72);
     border: 1px solid rgba(254,132,86,1);
   }
-  /*动画*/
   .ani_yd-message-fade-enter, .ani_yd-message-fade-leave-active {
     opacity: 0;
-    -webkit-transform: translate(0, -100%);
     transform: translate(0, -100%)
   }
-  .yd-flex-h-hL-vC { /*水平排列;水平左靠齐;垂直居中*/
-    display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;display: flex;
-    -webkit-align-items: center;-moz-align-items: center;-ms-align-items: center;align-items: center;
+  .center{
+    justify-content: center;
   }
-  .yd-flex-1 {-webkit-box-flex: 1;-moz-box-flex: 1;-webkit-flex: 1;-ms-flex: 1 1 auto;flex: 1;overflow: hidden} /*不会造成其他元素的挤压*/
 </style>

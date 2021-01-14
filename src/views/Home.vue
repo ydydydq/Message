@@ -10,7 +10,8 @@ export default {
     onClick() {
       this.$message({
         message: '测试测试',
-        type: 'success'
+        type: 'success',
+        center: true
       });
     }
   }

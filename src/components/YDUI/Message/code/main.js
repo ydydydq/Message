@@ -1,61 +1,55 @@
 import Vue from 'vue';
 import Main from './main.vue';
 
-var myMessageConstructor = Vue.extend(Main);
+var messageConstructor = Vue.extend(Main);
 let instance = null;
 let instances = [];
 let seed = 1;
 
-const myMessage = (options = {}) => {
-  // 处理直接传字符串
+const message = (options = {}) => {
+  // 处理直接传字符串的情况
   if(typeof options === 'string') {
     options = {
       message: options
     }
   }
 
-  // 实例化
-  instance = new myMessageConstructor({
+  instance = new messageConstructor({
     data: options
   });
-
-  // 唯一id标识
   let id = 'myMessage_' + seed++;
   instance.id = id;
 
-  // 在data中挂个关闭事件
+  // 处理options参数传递进来的关闭回调
   let optionsOnClose = options.onClose;
+  // 在实例的data属性中挂载onClose()方法, 等关闭的事件触发后来回调处理后续的事情。
   instance.onClose = () => {
-    myMessage.close(id, optionsOnClose);
+    message.close(id, optionsOnClose);
   };
 
-  // 当Vue实例没有el属性时,则该实例尚没有挂载到某个dom中;假如需要延迟挂载,可以在之后手动调用vm.$mount()方法来挂载
   instance.$mount();
-
-  // 加入DOM树
   document.body.appendChild(instance.$el);
-
-  // 偏移量
-  let verticalOffset = options.offset || instance.verticalOffset;
+  let offset = options.offset || instance.offset;
   instances.forEach(item => {
-    verticalOffset += item.$el.offsetHeight + 16
+    offset += item.$el.offsetHeight + 16
   });
-  instance.verticalOffset = verticalOffset;
+  instance.offset = offset;
 
   // 显示dom
   instance.visible = true;
 
-  // 保存实例
   instances.push(instance);
-
   return instance
 };
 
 /**
- * 关闭事件
+ * 当前组件隐藏后需要做的事情:
+ * 1. 处理一下其他组件的偏移量往上移
+ * 2. 调用options参数传进来的关闭回调
+ * 3. 删除保存instances变量中的实例
  * @param id: 实例id
  */
-myMessage.close = function(id, optionsOnClose) {
+message.close = function(id, optionsOnClose) {
   let len = instances.length;
   let index = -1;
   for (let i = 0; i < len; i++) {
@@ -77,6 +71,4 @@ myMessage.close = function(id, optionsOnClose) {
   }
 };
 
-
-
-export default myMessage
+export default message
